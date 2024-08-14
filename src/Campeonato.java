@@ -1,6 +1,6 @@
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.Random;
+import java.lang.Thread;
 
 public class Campeonato {
     public ArrayList<Clube> clubes;
@@ -26,11 +26,25 @@ public class Campeonato {
 
         for (int i = 0; i < perm.size(); i++) {
             for (int j = 0; j < 2; j++) {
+                switch (j) {
+                    case 0:
+                        System.out.println("Jogo de Ida - " + perm.get(i)[0].getNome() + " vs " + perm.get(i)[1].getNome());
+                    case 1:
+                        System.out.println("Jogo de Volta - " + perm.get(i)[0].getNome() + " vs " + perm.get(i)[1].getNome());
+                }
                 this.jogarPartida(perm.get(i)[0], perm.get(i)[1]);
             }
+            System.out.println();
         }
 
+        Clube[] classificacao = getClassificacao();
 
+        System.out.println("Classificação dos times:");
+        for (int k = 0; k < classificacao.length; k++) {
+            System.out.println(classificacao[k].getNome() + "\t\t" + classificacao[k].getPontos());
+        }
+
+        System.out.println(this.getCampeao(classificacao, classificacao.length).getNome());
     }
 
     private void jogarPartida(Clube clubeA, Clube clubeB) {
@@ -44,20 +58,43 @@ public class Campeonato {
         if (golsA > golsB) {
             clubeA.ganhar(saldoA);
             clubeB.perder(saldoB);
+            System.out.println("O time " + clubeA.getNome() + " ganhou o jogo!\nPlacar final: " + golsA + " x " + golsB);
         } else if (golsA < golsB) {
             clubeA.perder(saldoA);
             clubeB.ganhar(saldoB);
+            System.out.println("O time " + clubeB.getNome() + " ganhou o jogo!\nPlacar final: " + golsB + " x " + golsA);
         } else {
             clubeA.empatar();
             clubeB.empatar();
+            System.out.println("Empate!");
         }
     }
 
-    public void getClassificacao() {
+    public Clube[] getClassificacao() {
+        Clube[] classificacao = new Clube[this.clubes.size()];
+        int counter = 0;
 
+        for (int i = 0; i < this.clubes.size(); i++) {
+            if (i == 0) {
+                classificacao[0] = this.clubes.getFirst();
+                counter = 1;
+            }
+            else {
+                for (int j = 0; j < counter; j++) {
+                    if (classificacao[j].getPontos() < this.clubes.get(i).getPontos()) {
+                        continue;
+                    }
+                    else {
+                        classificacao[j+1] = this.clubes.get(i);
+                    }
+                }
+            }
+        }
+
+        return classificacao;
     }
 
-    public Clube getCampeao() {
-        return null;
+    public Clube getCampeao(Clube[] classificacao, int size) {
+        return classificacao[size - 1];
     }
 }
