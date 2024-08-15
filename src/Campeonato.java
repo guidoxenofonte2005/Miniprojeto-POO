@@ -29,8 +29,10 @@ public class Campeonato {
                 switch (j) {
                     case 0:
                         System.out.println("Jogo de Ida - " + perm.get(i)[0].getNome() + " vs " + perm.get(i)[1].getNome());
+                        break;
                     case 1:
                         System.out.println("Jogo de Volta - " + perm.get(i)[0].getNome() + " vs " + perm.get(i)[1].getNome());
+                        break;
                 }
                 this.jogarPartida(perm.get(i)[0], perm.get(i)[1]);
             }
@@ -41,10 +43,11 @@ public class Campeonato {
 
         System.out.println("Classificação dos times:");
         for (int k = 0; k < classificacao.length; k++) {
-            System.out.println(classificacao[k].getNome() + "\t\t" + classificacao[k].getPontos());
+            System.out.println("k = " + k);
+            System.out.println("Time " + classificacao[k].getNome() + "\t\t" + classificacao[k].getPontos());
         }
 
-        System.out.println(this.getCampeao(classificacao, classificacao.length).getNome());
+        System.out.println("Campeão: " + this.getCampeao(classificacao, classificacao.length).getNome());
     }
 
     private void jogarPartida(Clube clubeA, Clube clubeB) {
@@ -83,9 +86,13 @@ public class Campeonato {
                 for (int j = 0; j < counter; j++) {
                     if (classificacao[j].getPontos() < this.clubes.get(i).getPontos()) {
                         continue;
-                    }
-                    else {
-                        classificacao[j+1] = this.clubes.get(i);
+                    } else if (classificacao[j] == null) {
+                        classificacao[j] = this.clubes.get(i);
+                        counter++;
+                    } else {
+                        classificacao[j+1] = classificacao[j];
+                        classificacao[j] = this.clubes.get(i);
+                        counter++;
                     }
                 }
             }
