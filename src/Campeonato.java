@@ -1,6 +1,5 @@
 import java.util.ArrayList;
 import java.util.Random;
-import java.lang.Thread;
 
 public class Campeonato {
     public ArrayList<Clube> clubes;
@@ -47,7 +46,7 @@ public class Campeonato {
             System.out.println("Time " + classificacao[k].getNome() + "\t\t" + classificacao[k].getPontos());
         }
 
-        System.out.println("Campeão: " + this.getCampeao(classificacao, classificacao.length).getNome());
+        System.out.println("Campeão: time " + this.getCampeao(classificacao).getNome());
     }
 
     private void jogarPartida(Clube clubeA, Clube clubeB) {
@@ -75,25 +74,17 @@ public class Campeonato {
 
     public Clube[] getClassificacao() {
         Clube[] classificacao = new Clube[this.clubes.size()];
-        int counter = 0;
 
         for (int i = 0; i < this.clubes.size(); i++) {
-            if (i == 0) {
-                classificacao[0] = this.clubes.getFirst();
-                counter = 1;
-            }
-            else {
-                for (int j = 0; j < counter; j++) {
-                    if (classificacao[j].getPontos() < this.clubes.get(i).getPontos()) {
-                        continue;
-                    } else if (classificacao[j] == null) {
-                        classificacao[j] = this.clubes.get(i);
-                        counter++;
-                    } else {
-                        classificacao[j+1] = classificacao[j];
-                        classificacao[j] = this.clubes.get(i);
-                        counter++;
-                    }
+            classificacao[i] = this.clubes.get(i);
+        }
+
+        for (int i = 0; i < classificacao.length - 1; i++) {
+            for (int j = i + 1; j < classificacao.length; j++) {
+                if (classificacao[i].getPontos() < classificacao[j].getPontos()) {
+                    Clube temp = classificacao[i];
+                    classificacao[i] = classificacao[j];
+                    classificacao[j] = temp;
                 }
             }
         }
@@ -101,7 +92,8 @@ public class Campeonato {
         return classificacao;
     }
 
-    public Clube getCampeao(Clube[] classificacao, int size) {
-        return classificacao[size - 1];
+
+    public Clube getCampeao(Clube[] classificacao) {
+        return classificacao[0];
     }
 }
