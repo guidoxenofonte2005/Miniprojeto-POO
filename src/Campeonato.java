@@ -1,5 +1,6 @@
 import java.util.ArrayList;
 import java.util.Random;
+import java.lang.Thread;
 
 public class Campeonato {
     public ArrayList<Clube> clubes;
@@ -36,14 +37,24 @@ public class Campeonato {
                 this.jogarPartida(perm.get(i)[0], perm.get(i)[1]);
             }
             System.out.println();
+            try {
+                Thread.sleep(1500);
+            } catch (InterruptedException e) {
+                Thread.currentThread().interrupt();
+            }
         }
 
         Clube[] classificacao = getClassificacao();
 
         System.out.println("Classificação dos times:");
         for (int k = 0; k < classificacao.length; k++) {
-            System.out.println("k = " + k);
             System.out.println("Time " + classificacao[k].getNome() + "\t\t" + classificacao[k].getPontos());
+        }
+
+        try {
+            Thread.sleep(1000);
+        } catch (InterruptedException e) {
+            Thread.currentThread().interrupt();
         }
 
         System.out.println("Campeão: time " + this.getCampeao(classificacao).getNome());
